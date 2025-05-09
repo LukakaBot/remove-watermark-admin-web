@@ -1,6 +1,6 @@
 from fastapi import APIRouter
-from app.api.routes import douyin
-from app.api.routes import kuaishou
+from app.api.endpoints import douyin
+from app.api.endpoints import kuaishou
 
 
 api_router = APIRouter()

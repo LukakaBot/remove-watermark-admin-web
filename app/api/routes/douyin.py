@@ -1,9 +1,0 @@
-from fastapi import APIRouter
-
-
-router = APIRouter(tags=["douyin"])
-
-
-@router.get("/douyin")
-def get_no_watermark_video_url():
-    return "video url"
