@@ -7,8 +7,8 @@ from pydantic import BaseModel
 router = APIRouter(tags=["douyin"])
 
 
-class VideoParams(BaseModal):
-    share_content: str = Body(..., description="抖音分享内容")
+class DouyinVideoParams(BaseModel):
+    share_content: str
 
 
 # 提取 URL 链接
@@ -33,7 +33,7 @@ def get_redirect_url(url):
 
 
 @router.post("/douyin")
-def get_no_watermark_video_url(videoParams: DouyinVideoParams):
+def get_no_watermark_video_url(videoParams: Body(DouyinVideoParams)):
     # 使用正则表达式匹配 URL
     # urls = re.findall(r"https?://\S+", share_url)
 
