@@ -113,6 +113,7 @@ async def get_no_watermark_video_url(form_data: DouyinVideoParams = None):
 
     try:
         video_info = await get_video_info(url)
+        video_detail = video_info["video_(id)/page"]["videoInfoRes"]["item_list"][0]
     except Exception as error:
         return JSONResponse(
             content={
@@ -126,6 +127,6 @@ async def get_no_watermark_video_url(form_data: DouyinVideoParams = None):
         content={
             "code": 200,
             "message": "success",
-            "data": video_info,
+            "data": video_detail["video"],
         }
     )
