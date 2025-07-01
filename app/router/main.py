@@ -1,5 +1,5 @@
 from fastapi import APIRouter
-from app.api.endpoints import douyin
+from app.router.endpoints import douyin
 
 
 api_router = APIRouter()

@@ -90,8 +90,8 @@ async def get_video_info(share_url: str):
 
 
 @router.post("/douyin")
-async def get_no_watermark_video_url(form_data: DouyinVideoParams = None):
-    if not form_data or not form_data.share_content:
+async def get_no_watermark_video_url(share_content: str = None):
+    if not share_content:
         return JSONResponse(
             content={
                 "code": 400,
