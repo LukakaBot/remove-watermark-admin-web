@@ -6,12 +6,11 @@ import requests
 from pydantic import BaseModel
 import httpx
 
-router = APIRouter(tags=["douyin"])
-
-
 """
  8.18 https://v.douyin.com/JyCk5gy/ 复制佌鏈接，da鐦Dou音搜索，直接观看視频！
 """
+
+router = APIRouter(tags=["douyin"])
 
 
 class DouyinVideoParams(BaseModel):
@@ -36,13 +35,13 @@ def extract_url(share_content: str):
 
 # 获取重定向后的 URL
 def get_redirect_url(url):
-    response = requests.get(url, headers)
+    response = requests.get(url=url, headers=headers)
     return response.url
 
 
 # 从 URL 中提取视频 ID
 def get_video_id(url: str):
-    return re.search(video_id_regex, url).group(1)
+    return re.search(pattern=video_id_regex, string=url).group(1)
 
 
 # 根据视频 ID 获取请求 URL
@@ -55,26 +54,21 @@ def is_web_share_url(share_url: str) -> bool:
 
 
 async def get_video_info(share_url: str):
-
     if is_web_share_url(share_url):
-        # 网页分享链接
+        # 网页端分享链接
         video_id = share_url.strip("/").split("/")[-1]
     else:
-        # app分享链接
+        # app端分享链接
         redirect_url = get_redirect_url(share_url)
         video_id = get_video_id(redirect_url)
 
     request_url = get_request_url_by_video_id(video_id)
 
     async with httpx.AsyncClient(follow_redirects=True) as client:
-        response = await client.get(
-            request_url,
-            headers=headers,
-            timeout=10,
-        )
+        response = await client.get(url=request_url, headers=headers, timeout=10)
         response.raise_for_status()
 
-    match = re.search(json_regex, response.text, flags=re.DOTALL)
+    match = re.search(pattern=json_regex, string=response.text, flags=re.DOTALL)
 
     if not match or not match.group(1):
         print(f"原始响应内容片段:\n{response.text[:500]}...")
@@ -90,8 +84,8 @@ async def get_video_info(share_url: str):
 
 
 @router.post("/douyin")
-async def get_no_watermark_video_url(share_content: str = None):
-    if not share_content:
+async def get_no_watermark_video_url(form_data: DouyinVideoParams = None):
+    if not form_data and not form_data.share_content:
         return JSONResponse(
             content={
                 "code": 400,
