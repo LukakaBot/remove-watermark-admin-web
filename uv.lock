@@ -470,7 +470,7 @@ wheels = [
 ]
 
 [[package]]
-name = "short-video-remove-watermark-admin-web"
+name = "remove-watermark-admin-web"
 version = "0.1.0"
 source = { virtual = "." }
 dependencies = [
